@@ -62,14 +62,24 @@ public class Parser
     public static Statement parse(String line)
     {
         int    equalsIdx = line.indexOf('=');
-        String outVar    = line.substring(0, equalsIdx).trim();
 
-        if (isConstant(outVar))
-            throw new AssignConstantException(outVar);
+        if(equalsIdx != -1)
+        {
+            String outVar    = line.substring(0, equalsIdx).trim();
 
-        Expression expr = parseExpression(line.substring(equalsIdx + 1).trim());
+            if (isConstant(outVar))
+                throw new AssignConstantException(outVar);
 
-        return new Statement(outVar, expr);
+            Expression expr = parseExpression(line.substring(equalsIdx + 1).trim());
+
+            return new Statement(outVar, expr);
+        }
+        else
+        {
+            // all we're doing is getting the value of a variable
+            String var = line.trim();
+            return new Statement(var, new Expression.Variable(var));
+        }
     }
 
     public static List<Statement> parse(List<String> lines)
