@@ -6,22 +6,18 @@ import java.util.Map;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-interface EnvironmentReadable
-{
+interface EnvironmentReadable extends Iterable<Map.Entry<String, Double>> {
     double get(String name);
 }
 
-interface EnvironmentWritable extends EnvironmentReadable
-{
+interface EnvironmentWritable {
     void set(String name, double value);
 }
 
-public class Environment implements EnvironmentReadable, EnvironmentWritable, Iterable<Map.Entry<String, Double>>
-{
+public class Environment implements EnvironmentReadable, EnvironmentWritable {
     private final Map<String, Double> variables = new HashMap<>();
 
-    public Environment(Map<String, Double> initial)
-    {
+    public Environment(Map<String, Double> initial) {
         // add constants
         variables.put("pi", Math.PI);
         variables.put("PI", Math.PI);
@@ -32,34 +28,31 @@ public class Environment implements EnvironmentReadable, EnvironmentWritable, It
             variables.putAll(initial);
     }
 
-    public double get(String name)
-    {
+    @Override
+    public double get(String name) {
         if (variables.containsKey(name))
             return variables.get(name);
         else
             throw new UnknownVariableException(name);
     }
 
-    public void set(String name, double value)
-    {
+    @Override
+    public void set(String name, double value) {
         variables.put(name, value);
     }
 
     @Override
-    public Iterator<Map.Entry<String, Double>> iterator()
-    {
+    public Iterator<Map.Entry<String, Double>> iterator() {
         return variables.entrySet().iterator();
     }
 
     @Override
-    public void forEach(Consumer<? super Map.Entry<String, Double>> action)
-    {
+    public void forEach(Consumer<? super Map.Entry<String, Double>> action) {
         variables.entrySet().forEach(action);
     }
 
     @Override
-    public Spliterator<Map.Entry<String, Double>> spliterator()
-    {
+    public Spliterator<Map.Entry<String, Double>> spliterator() {
         return variables.entrySet().spliterator();
     }
 }
