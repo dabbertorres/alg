@@ -3,171 +3,171 @@ package com.aleciverson.alg;
 import java.util.function.Function;
 
 interface Expression {
-    double value(EnvironmentReadable env);
+  double value(EnvironmentReadable env);
 
-    class Value implements Expression {
-        private double val;
+  class Value implements Expression {
+    private double val;
 
-        public Value(double val) {
-            this.val = val;
-        }
-
-        @Override
-        public double value(EnvironmentReadable env) {
-            return val;
-        }
+    public Value(double val) {
+      this.val = val;
     }
 
-    class Variable implements Expression {
-        private String name;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return val;
+    }
+  }
 
-        public Variable(String name) {
-            this.name = name;
-        }
+  class Variable implements Expression {
+    private String name;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return env.get(name);
-        }
+    public Variable(String name) {
+      this.name = name;
     }
 
-    class Addition implements Expression {
-        private Expression lhs;
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return env.get(name);
+    }
+  }
 
-        public Addition(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
+  class Addition implements Expression {
+    private Expression lhs;
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return lhs.value(env) + rhs.value(env);
-        }
+    public Addition(Expression lhs, Expression rhs) {
+      this.lhs = lhs;
+      this.rhs = rhs;
     }
 
-    class Subtraction implements Expression {
-        private Expression lhs;
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return lhs.value(env) + rhs.value(env);
+    }
+  }
 
-        public Subtraction(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
+  class Subtraction implements Expression {
+    private Expression lhs;
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return lhs.value(env) - rhs.value(env);
-        }
+    public Subtraction(Expression lhs, Expression rhs) {
+      this.lhs = lhs;
+      this.rhs = rhs;
     }
 
-    class Multiplication implements Expression {
-        private Expression lhs;
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return lhs.value(env) - rhs.value(env);
+    }
+  }
 
-        public Multiplication(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
+  class Multiplication implements Expression {
+    private Expression lhs;
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return lhs.value(env) * rhs.value(env);
-        }
+    public Multiplication(Expression lhs, Expression rhs) {
+      this.lhs = lhs;
+      this.rhs = rhs;
     }
 
-    class Division implements Expression {
-        private Expression lhs;
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return lhs.value(env) * rhs.value(env);
+    }
+  }
 
-        public Division(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
+  class Division implements Expression {
+    private Expression lhs;
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return lhs.value(env) / rhs.value(env);
-        }
+    public Division(Expression lhs, Expression rhs) {
+      this.lhs = lhs;
+      this.rhs = rhs;
     }
 
-    class Power implements Expression {
-        private Expression lhs;
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return lhs.value(env) / rhs.value(env);
+    }
+  }
 
-        public Power(Expression lhs, Expression rhs) {
-            this.lhs = lhs;
-            this.rhs = rhs;
-        }
+  class Power implements Expression {
+    private Expression lhs;
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return Math.pow(lhs.value(env), rhs.value(env));
-        }
+    public Power(Expression lhs, Expression rhs) {
+      this.lhs = lhs;
+      this.rhs = rhs;
     }
 
-    class Negative implements Expression {
-        private Expression rhs;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return Math.pow(lhs.value(env), rhs.value(env));
+    }
+  }
 
-        public Negative(Expression rhs) {
-            this.rhs = rhs;
-        }
+  class Negative implements Expression {
+    private Expression rhs;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            return -1 * rhs.value(env);
-        }
+    public Negative(Expression rhs) {
+      this.rhs = rhs;
     }
 
-    class BuiltinCall implements Expression {
-        private Function<Double, Double> func;
-        private Expression arg;
+    @Override
+    public double value(EnvironmentReadable env) {
+      return -1 * rhs.value(env);
+    }
+  }
 
-        public BuiltinCall(Function<Double, Double> func, Expression arg) {
-            this.func = func;
-            this.arg = arg;
-        }
+  class BuiltinCall implements Expression {
+    private Function<Double, Double> func;
+    private Expression arg;
 
-        @Override
-        public double value(EnvironmentReadable env) {
-            double argVal = arg.value(env);
-            return func.apply(argVal);
-        }
+    public BuiltinCall(Function<Double, Double> func, Expression arg) {
+      this.func = func;
+      this.arg = arg;
     }
 
-    class Sine extends BuiltinCall {
-        public Sine(Expression subExpr) {
-            super(Math::sin, subExpr);
-        }
+    @Override
+    public double value(EnvironmentReadable env) {
+      double argVal = arg.value(env);
+      return func.apply(argVal);
     }
+  }
 
-    class Cosine extends BuiltinCall {
-        public Cosine(Expression subExpr) {
-            super(Math::cos, subExpr);
-        }
+  class Sine extends BuiltinCall {
+    public Sine(Expression subExpr) {
+      super(Math::sin, subExpr);
     }
+  }
 
-    class Tangent extends BuiltinCall {
-        public Tangent(Expression subExpr) {
-            super(Math::tan, subExpr);
-        }
+  class Cosine extends BuiltinCall {
+    public Cosine(Expression subExpr) {
+      super(Math::cos, subExpr);
     }
+  }
 
-    class Log extends BuiltinCall {
-        public Log(Expression subExpr) {
-            super(Math::log10, subExpr);
-        }
+  class Tangent extends BuiltinCall {
+    public Tangent(Expression subExpr) {
+      super(Math::tan, subExpr);
     }
+  }
 
-    class NaturalLog extends BuiltinCall {
-        public NaturalLog(Expression subExpr) {
-            super(Math::log, subExpr);
-        }
+  class Log extends BuiltinCall {
+    public Log(Expression subExpr) {
+      super(Math::log10, subExpr);
     }
+  }
 
-    class SquareRoot extends BuiltinCall {
-        public SquareRoot(Expression subExpr) {
-            super(Math::sqrt, subExpr);
-        }
+  class NaturalLog extends BuiltinCall {
+    public NaturalLog(Expression subExpr) {
+      super(Math::log, subExpr);
     }
+  }
+
+  class SquareRoot extends BuiltinCall {
+    public SquareRoot(Expression subExpr) {
+      super(Math::sqrt, subExpr);
+    }
+  }
 }
